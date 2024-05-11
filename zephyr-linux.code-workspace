@@ -1,0 +1,179 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		// Hush CMake
+		"cmake.configureOnOpen": false,
+
+		// IntelliSense
+		"C_Cpp.default.compilerPath": "/opt/zephyr/zephyr-sdk-0.16.5-1/riscv64-zephyr-elf/bin/riscv64-zephyr-elf-gcc",
+		"C_Cpp.default.compileCommands": "build/compile_commands.json",
+
+		// File Associations
+		"files.associations": {
+			"input-event-codes.h": "c",
+			"array": "c",
+			"atomic": "c",
+			"bit": "c",
+			"*.tcc": "c",
+			"cmath": "c",
+			"compare": "c",
+			"concepts": "c",
+			"bitset": "c",
+			"string": "c",
+			"unordered_map": "c",
+			"exception": "c",
+			"algorithm": "c",
+			"memory": "c",
+			"memory_resource": "c",
+			"random": "c",
+			"string_view": "c",
+			"type_traits": "c",
+			"utility": "c",
+			"functional": "c",
+			"fstream": "c",
+			"iosfwd": "c",
+			"istream": "c",
+			"limits": "c",
+			"new": "c",
+			"numeric": "c",
+			"ostream": "c",
+			"sstream": "c",
+			"streambuf": "c",
+			"system_error": "c",
+			"regex": "c",
+			"tuple": "c",
+			"typeinfo": "c"
+		}
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "SetEnv",
+				"type": "shell",
+				"command": "west",
+				"args": [
+					"config",
+					"zephyr.base","$/home/projects/zephyrproject/zephyr"
+				],
+				"options": {
+					"statusbar": {
+					  "hide" : true
+					}
+				  },
+				"group": "test"
+			},
+			{
+				"label": "West Build",
+				"dependsOn": [
+					"SetEnv"
+				],
+				"type": "shell",
+				"group": {
+					"kind": "build",
+					"isDefault": true
+				},
+				"command": "/home/projects/zephyrproject/.venv/bin/west",
+				"args": [
+					"build",
+					"-p",
+					"auto",
+					"-b",
+					"xiao_esp32c3"
+				],
+				"problemMatcher": [
+					"$gcc"
+				],
+			},
+			{
+				"label": "West Configurable Build",
+				"type": "shell",
+				"group": {
+					"kind": "build",
+				},
+				"command": "/home/projects/zephyrproject/.venv/bin/west",
+				"args": [
+					"build",
+					"-p",
+					"${input:pristine}",
+					"-b",
+					"${input:board}"
+				],
+				"problemMatcher": [
+					"$gcc"
+				]
+			},
+			{
+				"label": "West Flash",
+				"type": "shell",
+				"command": "/home/projects/zephyrproject/.venv/bin/west",
+				"args": [
+					"flash"
+				],
+				"problemMatcher": [
+					"$gcc"
+				]
+			}
+		],
+		"inputs": [
+			{
+				"id": "board",
+				"type": "promptString",
+				"default": "xiao_esp32c3",
+				"description": "See https://docs.zephyrproject.org/latest/boards/index.html"
+			},
+			{
+				"id": "pristine",
+				"type": "pickString",
+				"description": "Choose when to run a pristine build",
+				"default": "auto",
+				"options": [
+					"auto",
+					"always",
+					"never"
+				]
+			}
+		]
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Launch",
+				"device": "xiao_esp32c3",
+				"cwd": "${workspaceFolder}",
+				"executable": "build/zephyr/zephyr.elf",
+				"request": "launch",
+				"type": "cortex-debug",
+				"runToEntryPoint": "main",
+				"servertype": "jlink",
+				"gdbPath": "/opt/zephyr/zephyr-sdk-0.16.5-1/riscv64-zephyr-elf/bin/riscv64-zephyr-elf-gdb",
+				"preLaunchTask": "West Build"
+			},
+			{
+				"name": "Attach",
+				"device": "nRF52840_xxAA",
+				"cwd": "${workspaceFolder}",
+				"executable": "build/zephyr/zephyr.elf",
+				"request": "attach",
+				"type": "cortex-debug",
+				"runToEntryPoint": "main",
+				"servertype": "jlink",
+				"gdbPath": "/opt/zephyr/zephyr-sdk-0.16.5-1/riscv64-zephyr-elf/bin/riscv64-zephyr-elf-gdb"
+			},
+		]
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-vscode.cpptools-extension-pack",
+			"ms-python.python",
+			"ms-vscode.vscode-embedded-tools",
+			"ms-vscode.vscode-serial-monitor",
+			"donjayamanne.python-environment-manager"
+		]
+	}
+}
