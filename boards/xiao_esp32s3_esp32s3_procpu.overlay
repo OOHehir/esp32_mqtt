@@ -14,3 +14,7 @@ aliases {
 		zephyr,code = <INPUT_KEY_0>;	// 11
 	};
 };
+
+&wifi {
+	status = "okay";
+};
