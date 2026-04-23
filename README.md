@@ -1,43 +1,26 @@
-# esp32Touch
-Simple 'out of tree' project on the [Seeed XIAO ESP32 S3](https://docs.zephyrproject.org/latest/boards/seeed/xiao_esp32s3/doc/index.html) using the Zephyr RTOS. It should be straightforward to adapt to other ESP32S3 boards.
+# esp32_mqtt
 
+MQTT client on the Seeed XIAO ESP32 S3 using Zephyr RTOS — connects to WiFi and communicates with an MQTT broker, with proper event handling and logging.
 
-This assumes you've already installed & configured Zephyr.
+## Key Technologies
 
-## Working version
-Currently need to be
-```
-    git checkout v3.6-branch
-```
+- **MCU:** Seeed XIAO ESP32 S3
+- **RTOS:** Zephyr v3.6
+- **Protocol:** MQTT (Zephyr MQTT client)
+- **Build:** CMake + west
 
-## Initialize environment:
-As normal, source the environment:
-```
-    source ../zephyrproject/.venv/bin/activate
-    source ../zephyrproject/zephyr/zephyr-env.sh
-    source ../zephyrproject/zephyr/scripts/west_commands/completion/west-completion.bash
-```
-## Binary blobs
-Espressif HAL requires binary blobs for peripherals to work. Run the command below to retrieve those files.
-```
-    west blobs fetch hal_espressif
-```
-## Build:
-Build application & bootloader
-```
-    west build -p always -b xiao_esp32s3/esp32s3/procpu
-```
-## Flash
-```
-    west flash
+## Getting Started
+
+**Prerequisites:** Zephyr SDK, west, Espressif binary blobs
+
+```bash
+west blobs fetch hal_espressif
+west build -b xiao_esp32s3
+west flash
 ```
 
-## Modify config
- west build -t guiconfig --board xiao_esp32s3/esp32s3/procpu
+Configure WiFi credentials in `credentials.h` before building.
 
- ## Build with twister
- west twister -b xiao_esp32s3/esp32s3/procpu -t build /zephyr/samples/hello_world
+---
 
-## Pinout:
-
-![ESP32S3](images/esp32s3_pinout.jpeg)
+Built by Owen O'Hehir — embedded Linux, IoT, Matter & Rust consulting at [electronicsconsult.com](https://electronicsconsult.com). Available for contract and consulting work.
